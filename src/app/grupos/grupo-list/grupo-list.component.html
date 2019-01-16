@@ -1,0 +1,86 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-sm-12">
+      <button class="btn btn-primary pull-left" (click)="openModalAdd(add)">Añadir</button>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Numero</th>
+            <th>Nombre</th>
+            <th>Total</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="grupos">
+          <tr *ngFor="let grupo of grupos | orderBy:'numero'">
+            <td>{{ grupo.numero }}</td>
+            <td>{{ grupo.nombre }}</td>
+            <td>{{ grupo.puntuacionTotal }}</td>
+            <td>
+              <button class="btn btn-warning" (click)="openModalEdit(edit, grupo)">Editar</button> |
+              <button class="btn btn-danger" (click)="openModalDelete(delete, grupo._id)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #add>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Añadir Grupo</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <label for="numero">Numero</label>
+      <input type="number" class="form-control" name="numero" [(ngModel)]="grupo.numero">
+      <!--<p class="text-danger">{{errorMsg.name}}</p>-->
+
+      <label for="nombre">Nombre</label>
+      <input type="text" class="form-control" name="nombre" [(ngModel)]="grupo.nombre">
+      <!--<p class="text-danger">{{errorMsg.address}}</p>-->
+
+      <button class="btn btn-primary" (click)="onSave()" [disabled]="!enableBtn()">Añadir</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #edit>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar Grupo</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <label for="numero">Numero</label>
+      <input type="number" class="form-control" name="numero" [(ngModel)]="editGrupo.numero" (change)="enableBtnEdit=true">
+      <!--<p class="text-danger">{{errorMsg.name}}</p>-->
+
+      <label for="nombre">Nombre</label>
+      <input type="text" class="form-control" name="nombre" [(ngModel)]="editGrupo.nombre" (change)="enableBtnEdit=true">
+      <!--<p class="text-danger">{{errorMsg.address}}</p>-->
+
+      <button class="btn btn-primary" (click)="onUpdate()" [disabled]="!enableBtnEdit">Editar</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #delete>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Eliminar Grupo</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>¿Deseas eliminar el grupo?</p>
+    <button (click)="modalRef.hide()" class="btn btn-primary">NO</button> | 
+    <button (click)="deleteGrupo()" class="btn btn-danger">SI</button>
+  </div>
+</ng-template>

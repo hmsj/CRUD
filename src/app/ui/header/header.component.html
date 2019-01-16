@@ -1,0 +1,79 @@
+<nav class="navbar navbar-dark bg-corp">
+  <div class="navbar-expand">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" routerLink="/">{{ title }}</a>
+      <a class="nav-item nav-link" routerLink="/grupos">Grupos</a>
+      <a class="nav-item nav-link" routerLink="/pruebas">Pruebas</a>
+      <a class="nav-item nav-link" routerLink="/resultados">Resultados</a>
+      <a class="nav-item nav-link" routerLink="/usuarios" *ngIf="isUserLogged() && currentUser.roleId===1">Usuarios</a>
+    </div>
+  </div>
+  <div class="navbar-expand">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" (click)="openModal(login)" *ngIf="!isUserLogged()">Acceder</a>
+        <a class="nav-item nav-link active" (click)="onLogout()" *ngIf="isUserLogged()">Salir</a>
+        <a class="nav-item nav-link" (click)="openModal(signup)" *ngIf="!isUserLogged()">Registrarse</a>
+      </div>
+    </div>
+</nav>
+
+<div class="alert alert-dismissible fade show text-center" [ngClass]="{'alert-success': messageType==='success', 'alert-danger': messageType==='danger', 'alert-warning': messageType==='warning', 'alert-info': typeMessage==='info'}" *ngIf="isMessage()">
+  <button type="button" class="close" data-dismiss="alert" (click)="closeAlert()">&times;</button>
+  <strong>{{message}}</strong>
+</div>
+
+<ng-template #login>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Login</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+        <p class="text-danger">{{errorMsg}}</p>
+      <label for="username">Username</label>
+      <input type="text" class="form-control" name="username" [(ngModel)]="usuario.username">
+
+      <label for="pass">Contraseña</label>
+      <input type="password" class="form-control" name="pass" [(ngModel)]="usuario.pass">
+      
+      <button class="btn btn-primary" (click)="onLogin()" [disabled]="!enableBtn()">Acceder</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #signup>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Registro</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <label for="username">Username: </label>
+        <span class="text-danger" *ngIf="errorUsernameMsg!==''">*{{errorUsernameMsg}}</span>
+        <input type="text" class="form-control" name="username" [(ngModel)]="usuario.username" (keyup)="validUsername()">
+
+        <label for="nombre">Nombre: </label>
+        <input type="text" class="form-control" name="nombre" [(ngModel)]="usuario.nombre">
+
+        <label for="apellidos">Apellidos: </label>
+        <input type="text" class="form-control" name="apellidos" [(ngModel)]="usuario.apellidos">
+
+        
+        <label for="email">Correo: </label>
+        <span class="text-danger" *ngIf="errorEmailMsg!==''">*{{errorEmailMsg}}</span>
+        <input type="email" class="form-control" name="email" [(ngModel)]="usuario.email" (keyup)="validEmail()">
+  
+        <label for="pass">Contraseña: </label>
+        <input type="password" class="form-control" name="pass" [(ngModel)]="usuario.pass">
+        <p class="text-danger">{{errorPassMsg}}</p>
+        <label for="pass1">Repetir Contraseña: </label>
+        <input type="password" class="form-control" name="pass1" [(ngModel)]="repeatPass" (keyup)="validPass()">
+        
+        <button class="btn btn-primary" (click)="onSignup()" [disabled]="!enableBtnSignup()">Registrarse</button>
+      </form>
+    </div>
+  </ng-template>

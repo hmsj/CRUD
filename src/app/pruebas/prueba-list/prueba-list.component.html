@@ -1,0 +1,104 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-sm-12">
+      <button class="btn btn-primary pull-left" (click)="openModalAdd(add)">Añadir</button>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Numero</th>
+            <th>Nombre</th>
+            <th>Zona</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prueba of pruebas | orderBy:'numero'">
+            <td>{{ prueba.numero }}</td>
+            <td>{{ prueba.nombre }}</td>
+            <td>{{ prueba.zona }}</td>
+            <td>{{ prueba.descripcion }}</td>
+            <td>
+              <button class="btn btn-warning" (click)="openModalEdit(edit, prueba)">Editar</button> |
+              <button class="btn btn-danger" (click)="openModalDelete(delete, prueba._id)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #add>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Añadir Prueba</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <label for="numero">Numero</label>
+      <input type="number" class="form-control" name="numero" [(ngModel)]="prueba.numero">
+      <!--<p class="text-danger">{{errorMsg.name}}</p>-->
+
+      <label for="nombre">Nombre</label>
+      <input type="text" class="form-control" name="nombre" [(ngModel)]="prueba.nombre">
+      <!--<p class="text-danger">{{errorMsg.address}}</p>-->
+
+      <label for="zona">Zona</label>
+      <input type="text" class="form-control" name="zona" [(ngModel)]="prueba.zona">
+      <!--<p class="text-danger">{{errorMsg.address}}</p>-->
+
+      <label for="descripcion">Descripción</label>
+      <textarea class="form-control" name="descripcion" [(ngModel)]="prueba.descripcion"></textarea>
+      <!--<p class="text-danger">{{errorMsg.address}}</p>-->
+
+      <button class="btn btn-primary" (click)="onSave()" [disabled]="!enableBtn()">Añadir</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #edit>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar Prueba</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <label for="numero">Numero</label>
+      <input type="number" class="form-control" name="numero" [(ngModel)]="editPrueba.numero" (change)="enableBtnEdit=true">
+      <!--<p class="text-danger">{{errorMsg.name}}</p>-->
+
+      <label for="nombre">Nombre</label>
+      <input type="text" class="form-control" name="nombre" [(ngModel)]="editPrueba.nombre" (change)="enableBtnEdit=true">
+      <!--<p class="text-danger">{{errorMsg.address}}</p>-->
+
+      <label for="zona">Zona</label>
+      <input type="text" class="form-control" name="zona" [(ngModel)]="editPrueba.zona" (change)="enableBtnEdit=true">
+      <!--<p class="text-danger">{{errorMsg.address}}</p>-->
+
+      <label for="descripcion">Descripción</label>
+      <textarea class="form-control" name="descripcion" [(ngModel)]="editPrueba.descripcion" (change)="enableBtnEdit=true"></textarea>
+      <!--<p class="text-danger">{{errorMsg.address}}</p>-->
+
+      <button class="btn btn-primary" (click)="onUpdate()" [disabled]="!enableBtnEdit">Editar</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #delete>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Eliminar Prueba</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>¿Deseas eliminar la prueba?</p>
+    <button (click)="modalRef.hide()" class="btn btn-primary">NO</button> | 
+    <button (click)="deletePrueba()" class="btn btn-danger">SI</button>
+  </div>
+</ng-template>
